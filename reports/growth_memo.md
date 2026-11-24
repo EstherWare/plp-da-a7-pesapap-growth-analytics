@@ -1,32 +1,19 @@
-# Growth Memo
+# PesaPap Growth Memo
 
 ## Result
 
-The onboarding experiment showed that users exposed to the simplified onboarding screen (Group B) achieved a higher conversion rate than users in the control group (Group A).
+The simplified onboarding group converted 215 of 1,557 assigned users (13.81%), compared with 151 of 1,443 control users (10.46%). The observed difference is 3.34 percentage points, or a 31.96% relative lift. A two-sided Pearson chi-square test gives p=0.0052; the 95% Newcombe confidence interval for the difference is 1.00–5.67 percentage points.
 
-The SQL analysis also showed strong transaction activity across all product categories, with Send Money and Airtime contributing a significant share of platform usage.
+The assignment balance check found 1,443 control and 1,557 simplified-onboarding users (chi-square p=0.0374). The analysis also flagged 3,737 transactions before signup dates, involving 1,749 users (58.3% of all users).
 
 ## Impact
 
-Improving onboarding conversion directly increases the number of users who become active customers.
-
-A higher conversion rate can generate more completed transactions, greater transaction value, and increased customer lifetime value.
-
-The retention and RFM analyses indicate that retaining newly acquired users remains important for sustaining long-term growth.
+If the measured effect carries over, the simplified flow corresponds to about 33 additional conversions per 1,000 assigned users. The experiment measures conversion only; it does not establish added transaction value, retention, or customer lifetime value.
 
 ## Recommendation
 
-Roll out the simplified onboarding experience if the experiment results remain statistically significant (p-value < 0.05) and the confidence interval indicates a positive uplift.
-
-Additionally:
-
-- Continue monitoring post-conversion transaction behavior.
-- Develop campaigns targeting At-Risk customer segments.
-- Strengthen acquisition channels that generate the highest-quality users.
-- Track retention performance monthly.
+Proceed with a monitored, staged rollout of the simplified screen while keeping a randomized holdout. Investigate the group-size imbalance and confirm the uplift in a follow-up test before committing to a full rollout. Track conversion alongside post-signup transaction activity and retention.
 
 ## Caveats
 
-Several users were identified with transaction dates occurring before their recorded signup dates, indicating a data-quality issue that should be reviewed by the data engineering team.
-
-The experiment evaluated conversion only. Long-term effects on retention, transaction frequency, and customer value were not measured and should be monitored after rollout.
+The group-size balance test flags an allocation difference, which should be investigated even though the observed conversion difference is statistically significant. The confidence interval quantifies uncertainty in conversion lift, not downstream business value. Pre-signup transaction rows are retained in overall SQL and transaction KPIs to preserve source totals, but excluded from cohort retention because they cannot represent post-signup activity. June is a partial transaction month, so affected cohort cells are marked incomplete.

@@ -1,131 +1,28 @@
 # PesaPap Growth Analytics
 
-## Project Summary
+## Project summary
 
-This project analyzes growth performance for PesaPap, a Kenyan digital-payments startup.
+This project uses a reproducible synthetic dataset to assess PesaPap's growth, transaction activity, user cohorts, RFM segments, and simplified-onboarding experiment. It combines SQLite queries with a Python KPI scorecard and experiment analysis.
 
-The analysis includes:
+## Data tables
 
-- Data validation
-- SQL business analysis
-- KPI scorecard
-- RFM segmentation
-- Cohort retention analysis
-- Onboarding experiment evaluation
-- Growth recommendations
+| Table | Description | Primary key | Foreign key |
+|---|---|---|---|
+| `users` | User signup date, county, and acquisition channel | `user_id` | — |
+| `transactions` | Transaction date, product, and amount | `txn_id` | `user_id` → `users.user_id` |
+| `experiment` | Onboarding assignment and conversion outcome | `user_id` | `user_id` → `users.user_id` |
 
-The objective is to determine whether the new onboarding experience should be rolled out to all users.
+## How to run
 
----
-
-# Dataset Tables
-
-## users
-
-| Column | Description |
-|----------|----------|
-| user_id | Unique user identifier |
-| signup_date | User registration date |
-| county | User county |
-| acquisition_channel | Acquisition source |
-
-Primary Key:
-
-```text
-user_id
-```
-
----
-
-## transactions
-
-| Column | Description |
-|----------|----------|
-| txn_id | Transaction identifier |
-| user_id | User identifier |
-| txn_date | Transaction date |
-| product | Product type |
-| amount | Transaction amount |
-
-Primary Key:
-
-```text
-txn_id
-```
-
-Foreign Key:
-
-```text
-user_id → users.user_id
-```
-
----
-
-## experiment
-
-| Column | Description |
-|----------|----------|
-| user_id | User identifier |
-| group | Experiment group |
-| converted | Conversion indicator |
-
-Primary Key:
-
-```text
-user_id
-```
-
-Foreign Key:
-
-```text
-user_id → users.user_id
-```
-
----
-
-# How To Run
-
-## 1 Generate data
-
-Run:
+From the repository root, install the analysis libraries and generate the CSV files:
 
 ```bash
+python -m pip install -r requirements.txt
 python generate_data.py
 ```
 
-This creates:
+Open `pesapap_analysis.ipynb` in Jupyter and run all cells from top to bottom. The notebook regenerates the same CSV data, builds `pesapap.db` from the CSVs, runs the validation query and every query A–H from `sql/queries.sql` with `pd.read_sql`, then produces the KPI scorecard, RFM segments, cohort retention table, and experiment analysis. Generated CSV and database files are excluded from Git.
 
-```text
-users.csv
-transactions.csv
-experiment.csv
-```
+## Headline recommendation
 
-## 2 Run notebook
-
-Open:
-
-```text
-pesapap_analysis.ipynb
-```
-
-Run all cells from top to bottom.
-
-## 3 Outputs
-
-The notebook produces:
-
-- SQL analysis
-- KPI scorecard
-- RFM segmentation
-- Cohort retention analysis
-- Experiment evaluation
-
----
-
-# Headline Recommendation
-
-The simplified onboarding experience (Group B) should be rolled out if the experiment demonstrates statistical significance and a positive confidence interval.
-
-The growth team should continue monitoring user retention and transaction behavior after implementation.
-
+The simplified onboarding group converted at 13.81%, versus 10.46% for control: a 3.34 percentage-point increase (31.96% relative lift; 95% confidence interval for the difference: 1.00–5.67 percentage points; chi-square p=0.0052). This supports a monitored, staged rollout while retaining a randomized holdout. The assignment balance check flagged unequal group sizes (1,443 vs. 1,557; p=0.0374), so investigate the allocation imbalance and confirm the result before full rollout.
