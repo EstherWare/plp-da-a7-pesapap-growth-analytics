@@ -1,0 +1,8 @@
+*.db
+
+users.csv
+transactions.csv
+experiment.csv
+
+__pycache__/
+.ipynb_checkpoints/
